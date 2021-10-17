@@ -9,7 +9,6 @@ public class StringPermutations{
             for(int i = startIndex; i <= endIndex; i++) {
                 String modifiedStr = swapPositions(inputString, startIndex, i);
                 printPermutations(modifiedStr, startIndex + 1, endIndex);
-                inputString = swapPositions(modifiedStr, startIndex, i);
             }
         }
     }
