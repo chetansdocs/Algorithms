@@ -1,6 +1,8 @@
 package org.example.graphs;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Graph traversal for connected graphs. Modify logic for disconnected
@@ -55,14 +57,34 @@ public class Graph {
         }
     }
 
+    public void topologicalSort() {
+          int[] inDegree = new int[adjacencyList.size()];
+          adjacencyList.forEach((vertex, connectedVertex) -> {
+            connectedVertex.forEach(currentVertex -> inDegree[currentVertex]++);
+          });
+          Queue<Integer> queue = new LinkedList<>();
+          Arrays.stream(inDegree).filter(currentValue -> currentValue == 0).forEach(queue::add);
+          while(!queue.isEmpty()) {
+              int currentJob = queue.poll();
+              System.out.println(currentJob);
+              for(int i: adjacencyList.get(currentJob)) {
+                  if(--inDegree[i] == 0) {
+                      queue.add(i);
+                  }
+              }
+          }
+    }
+
     public static void main(String[] args) {
         Graph graph = new Graph();
         graph.initializeGraph(5);
         graph.addEdge(0, 1);
         graph.addEdge(0, 2);
-        graph.addEdge(2, 3);
-        graph.addEdge(1, 3);
+        graph.addEdge(2, 4);
+        graph.addEdge(4, 3);
         graph.addEdge(1, 4);
+        System.out.println("Topological");
+        graph.topologicalSort();
         System.out.println("BFS Traversal");
         graph.BFSTraversal(0, 5);
         System.out.println("DFS Traversal");
